@@ -7,8 +7,8 @@
 
 JRB dict;
 char stopWords[50][50];
-char properNouns[50][20];
-int countDict[100][100];
+char properNouns[100][50];
+int countDict[500][100];
 int n=0;
 int properNounsNum = 0;
 int stopWordsNum;
