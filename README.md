@@ -2,6 +2,7 @@
 
 ## Cách biên dịch:
 Các công cụ sử dụng: cmake, ninja
+
 Vào thư mục w1 chạy các lệnh: 
 - mkdir b; cd b
 - cmake .. -G Ninja
