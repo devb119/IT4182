@@ -6,9 +6,9 @@
 #include "libfdr/jrb.h"
 
 JRB dict;
+JRB properNouns2;
 char stopWords[50][50];
-char properNouns[100][50];
-int countDict[500][100];
+int countDict[800][50];
 int n=0;
 int properNounsNum = 0;
 int stopWordsNum;
@@ -32,12 +32,11 @@ int isStopWord(char s[]){
 }
 
 int isProperNoun(char s[]){
-    for(int i=0; i<properNounsNum; i++){
-        if(strcasecmp(s, properNouns[i]) == 0){
-            return 1;
-        }
+    JRB node = jrb_find_str(properNouns2, s);
+    if(!node){
+        return 0;
     }
-    return 0;
+    return 1;
 }
 
 void toLowerCase(char s[]){
@@ -48,22 +47,30 @@ void toLowerCase(char s[]){
 
 void readProperNouns(){
     FILE *f = fopen("vanban.txt", "r");
-    char lastWord[30];
+    char lastWord[50];
     strcpy(lastWord, "");
     while(!feof(f)){
-        char s[30];
+        char s[50], sCopy[50];
         fscanf(f, "%s", s);
+        strcpy(sCopy, s);
         if(strlen(lastWord) != 0){
-            if(lastWord[strlen(lastWord) - 1] != "." && isupper(s[0])){
+            if(lastWord[strlen(lastWord) - 1] != '.' && isupper(s[0]) 
+            && lastWord[strlen(lastWord) - 1] != '!' && lastWord[strlen(lastWord) - 1] != '?'){
                 int lastIdx = strlen(s) - 1;
-                if(!isalpha(s[strlen(s)-1])){
+                if(!isalpha(s[lastIdx])){
                     memmove(&s[lastIdx], &s[lastIdx + 1], strlen(s) - lastIdx);
                 }
-                strcpy(properNouns[properNounsNum], s);
-                properNounsNum++;
+                JRB node = jrb_find_str(properNouns2, s);
+                if(!node){
+                    char *key = strdup(s);
+                    toLowerCase(key);
+                    jrb_insert_str(properNouns2, key, (Jval){.i = 0});
+                    properNounsNum++;
+                    printf("proper noun: %s\n", key);
+                }
             }
         }
-        strcpy(lastWord, s);
+        strcpy(lastWord, sCopy);
     }
 }
 
@@ -74,6 +81,7 @@ void readFile(){
     {
         char s[200];
         fgets(s, 200, f);
+        // printf("%s", s);
         if(s[strlen(s)-1] == '\n'){
             s[strlen(s) - 1] = '\0';
         }
@@ -136,6 +144,7 @@ void printResult(){
 int main(){
     FILE *f = fopen("vanban.txt", "r");
     dict = make_jrb();
+    properNouns2 = make_jrb();
     readProperNouns();
     readStopWord();
     readFile();
