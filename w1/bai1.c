@@ -6,7 +6,7 @@
 #include "libfdr/jrb.h"
 
 JRB dict;
-JRB properNouns2;
+JRB properNouns;
 char stopWords[50][50];
 int countDict[800][50];
 int n=0;
@@ -32,7 +32,7 @@ int isStopWord(char s[]){
 }
 
 int isProperNoun(char s[]){
-    JRB node = jrb_find_str(properNouns2, s);
+    JRB node = jrb_find_str(properNouns, s);
     if(!node){
         return 0;
     }
@@ -60,13 +60,13 @@ void readProperNouns(){
                 if(!isalpha(s[lastIdx])){
                     memmove(&s[lastIdx], &s[lastIdx + 1], strlen(s) - lastIdx);
                 }
-                JRB node = jrb_find_str(properNouns2, s);
+                JRB node = jrb_find_str(properNouns, s);
                 if(!node){
                     char *key = strdup(s);
                     toLowerCase(key);
-                    jrb_insert_str(properNouns2, key, (Jval){.i = 0});
+                    jrb_insert_str(properNouns, key, (Jval){.i = 0});
                     properNounsNum++;
-                    printf("proper noun: %s\n", key);
+                    // printf("proper noun: %s\n", key);
                 }
             }
         }
@@ -144,7 +144,7 @@ void printResult(){
 int main(){
     FILE *f = fopen("vanban.txt", "r");
     dict = make_jrb();
-    properNouns2 = make_jrb();
+    properNouns = make_jrb();
     readProperNouns();
     readStopWord();
     readFile();
