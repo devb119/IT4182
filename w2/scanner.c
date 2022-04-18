@@ -138,9 +138,34 @@ Token* getToken(void) {
     token = makeToken(SB_TIMES, lineNo, colNo);
     readChar();
     return token;
+  case CHAR_SLASH:
+    token = makeToken(SB_SLASH, lineNo, colNo);
+    return token;
   case CHAR_EQ:
     token = makeToken(SB_EQ, lineNo, colNo);
     readChar();
+    return token;
+  case CHAR_GT:
+    ln = lineNo;
+    cn = colNo;
+    readChar();
+    if(charCodes[currentChar] == CHAR_EQ){
+      token = makeToken(SB_GE, ln, cn);
+      readChar();
+      return token;
+    }
+    token = makeToken(SB_GT, ln, cn);
+    return token;
+  case CHAR_LT:
+    ln = lineNo;
+    cn = colNo;
+    readChar();
+    if(charCodes[currentChar] == CHAR_EQ){
+      token = makeToken(SB_LE, ln, cn);
+      readChar();
+      return token;
+    }
+    token = makeToken(SB_LT, ln, cn);
     return token;
   case CHAR_LPAR:
     token = makeToken(SB_LPAR, lineNo, colNo);
