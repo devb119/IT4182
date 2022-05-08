@@ -42,10 +42,36 @@ Type* makeArrayType(int arraySize, Type* elementType) {
 
 Type* duplicateType(Type* type) {
   // TODO
+  Type* duplicatedType;
+  switch(type->typeClass){
+    case TP_INT:
+      duplicatedType = makeIntType();
+      break;
+    case TP_CHAR:
+      duplicatedType = makeCharType();
+      break;
+    case TP_ARRAY:
+      duplicatedType = makeArrayType(type->arraySize, type->elementType);
+      break;
+  }
+  return duplicatedType;
 }
 
 int compareType(Type* type1, Type* type2) {
   // TODO
+  // Check if have same typeClass
+  if(type1->typeClass == type2->typeClass){
+      // If type array -> have to check arraySize
+    if(type1->typeClass == TP_ARRAY){
+      if(type1->arraySize == type2->arraySize){
+        // If have the same size then compare elementType
+        return compareType(type1->elementType, type2->elementType);
+      // If not have same size -> false
+      }else return 0;
+      // If not array type then they have the same type
+    }else return 1;
+  // If not same typeClass then false
+  }else return 0;
 }
 
 void freeType(Type* type) {
