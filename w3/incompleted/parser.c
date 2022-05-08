@@ -327,15 +327,12 @@ void compileStatements2(void) {
   // TODO
   switch (lookAhead->tokenType)
   {
-  case SB_SEMICOLON:
-    eat(SB_SEMICOLON);
-    compileStatement();
-    compileStatements2();
-    break;
   case KW_END:
     break;
   default:
-    error(ERR_INVALIDSTATEMENT, lookAhead->lineNo, lookAhead->colNo);
+    eat(SB_SEMICOLON);
+    compileStatement();
+    compileStatements2();
     break;
   }
 }
