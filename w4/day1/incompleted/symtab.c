@@ -265,7 +265,14 @@ void freeObjectList(ObjectNode *objList) {
 
 void freeReferenceList(ObjectNode *objList) {
   // TODO
-  
+  ObjectNode* list = objList;
+
+  while (list->next != NULL)
+  {
+    ObjectNode* node = list;
+    list = list->next;
+    free(node);
+  }
 }
 
 void addObject(ObjectNode **objList, Object* obj) {
@@ -284,6 +291,14 @@ void addObject(ObjectNode **objList, Object* obj) {
 
 Object* findObject(ObjectNode *objList, char *name) {
   // TODO
+  ObjectNode* list = objList;
+  
+  while(list->next != NULL){
+    if(strcmp(list->object->name, name) == 0)
+    return list->object;
+    list = list->next;
+  }
+  return NULL;
 }
 
 /******************* others ******************************/
