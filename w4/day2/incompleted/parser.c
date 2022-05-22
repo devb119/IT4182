@@ -51,13 +51,25 @@ void compileProgram(void) {
 
 void compileBlock(void) {
   // TODO: create and declare constant objects
+  Object* constObj;
+  ConstantValue* constValue;
+
   if (lookAhead->tokenType == KW_CONST) {
     eat(KW_CONST);
 
     do {
       eat(TK_IDENT);
+
+      // create constant object
+      constObj = createConstantObject(currentToken->string);
       eat(SB_EQ);
-      compileConstant();
+
+      // read constant value
+      constValue = compileConstant();
+      constObj->constAttrs->value = constValue;
+
+      // declare object to current scope
+      declareObject(constObj);
       eat(SB_SEMICOLON);
     } while (lookAhead->tokenType == TK_IDENT);
 
@@ -68,13 +80,20 @@ void compileBlock(void) {
 
 void compileBlock2(void) {
   // TODO: create and declare type objects
+  Object* typeObj;
+  Type* actualType;
+  
   if (lookAhead->tokenType == KW_TYPE) {
     eat(KW_TYPE);
 
     do {
       eat(TK_IDENT);
+      typeObj = createTypeObject(currentToken->string);
       eat(SB_EQ);
-      compileType();
+      actualType = compileType();
+      typeObj->typeAttrs->actualType = actualType;
+
+      declareObject(typeObj);
       eat(SB_SEMICOLON);
     } while (lookAhead->tokenType == TK_IDENT);
 
@@ -168,17 +187,19 @@ ConstantValue* compileConstant(void) {
   switch (lookAhead->tokenType) {
   case SB_PLUS:
     eat(SB_PLUS);
-    compileConstant2();
+    constValue = compileConstant2();
     break;
   case SB_MINUS:
     eat(SB_MINUS);
-    compileConstant2();
+    constValue = compileConstant2();
+    constValue->intValue = - constValue->intValue;
     break;
   case TK_CHAR:
     eat(TK_CHAR);
+    constValue->charValue = currentToken->string[0];
     break;
   default:
-    compileConstant2();
+    constValue = compileConstant2();
     break;
   }
   return constValue;
