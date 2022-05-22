@@ -120,7 +120,12 @@ void compileBlock3(void) {
       varObj = createVariableObject(currentToken->string);
       eat(SB_COLON);
 
-      compileType();
+      // read var type
+      varType = compileType();
+      varObj->varAttrs->type = varType;
+      // declare var obj
+      declareObject(varObj);
+
       eat(SB_SEMICOLON);
     } while (lookAhead->tokenType == TK_IDENT);
 
@@ -243,7 +248,7 @@ Type* compileType(void) {
   switch (lookAhead->tokenType) {
   case KW_INTEGER: 
     eat(KW_INTEGER);
-    type->typeClass = makeIntType();
+    type = makeIntType();
     break;
   case KW_CHAR: 
     eat(KW_CHAR); 
