@@ -33,7 +33,7 @@ void eat(TokenType tokenType) {
 }
 
 void compileProgram(void) {
-  // TODO: create, enter, and exit program block
+  // DONE: create, enter, and exit program block
   Object* program;
 
   eat(KW_PROGRAM);
@@ -50,7 +50,7 @@ void compileProgram(void) {
 }
 
 void compileBlock(void) {
-  // TODO: create and declare constant objects
+  // DONE: create and declare constant objects
   Object* constObj;
   ConstantValue* constValue;
 
@@ -79,7 +79,7 @@ void compileBlock(void) {
 }
 
 void compileBlock2(void) {
-  // TODO: create and declare type objects
+  // DONE: create and declare type objects
   Object* typeObj;
   Type* actualType;
   
@@ -88,11 +88,15 @@ void compileBlock2(void) {
 
     do {
       eat(TK_IDENT);
+      // create type obj
       typeObj = createTypeObject(currentToken->string);
       eat(SB_EQ);
+
+      // read actual type
       actualType = compileType();
       typeObj->typeAttrs->actualType = actualType;
 
+      // declare type obj
       declareObject(typeObj);
       eat(SB_SEMICOLON);
     } while (lookAhead->tokenType == TK_IDENT);
@@ -104,12 +108,18 @@ void compileBlock2(void) {
 
 void compileBlock3(void) {
   // TODO: create and declare variable objects
+  Object* varObj;
+  Type* varType;
+
   if (lookAhead->tokenType == KW_VAR) {
     eat(KW_VAR);
 
     do {
       eat(TK_IDENT);
+      // create var type
+      varObj = createVariableObject(currentToken->string);
       eat(SB_COLON);
+
       compileType();
       eat(SB_SEMICOLON);
     } while (lookAhead->tokenType == TK_IDENT);
@@ -181,7 +191,7 @@ ConstantValue* compileUnsignedConstant(void) {
 }
 
 ConstantValue* compileConstant(void) {
-  // TODO: create and return a constant
+  // DONE: create and return a constant
   ConstantValue* constValue;
 
   switch (lookAhead->tokenType) {
@@ -206,12 +216,13 @@ ConstantValue* compileConstant(void) {
 }
 
 ConstantValue* compileConstant2(void) {
-  // TODO: create and return a constant value
+  // DONE: create and return a constant value
   ConstantValue* constValue;
 
   switch (lookAhead->tokenType) {
   case TK_NUMBER:
     eat(TK_NUMBER);
+    constValue = makeIntConstant(currentToken->value);
     break;
   case TK_IDENT:
     eat(TK_IDENT);
@@ -224,23 +235,32 @@ ConstantValue* compileConstant2(void) {
 }
 
 Type* compileType(void) {
-  // TODO: create and return a type
+  // DONE: create and return a type
   Type* type;
+  int arraySize;
+  Type* elementType;
 
   switch (lookAhead->tokenType) {
   case KW_INTEGER: 
     eat(KW_INTEGER);
+    type->typeClass = makeIntType();
     break;
   case KW_CHAR: 
     eat(KW_CHAR); 
+    type = makeCharType();
     break;
   case KW_ARRAY:
     eat(KW_ARRAY);
     eat(SB_LSEL);
+
+    // read array size
     eat(TK_NUMBER);
+    arraySize = currentToken->value;
+    
     eat(SB_RSEL);
     eat(KW_OF);
-    compileType();
+    elementType = compileType();
+    type = makeArrayType(arraySize, elementType);
     break;
   case TK_IDENT:
     eat(TK_IDENT);
