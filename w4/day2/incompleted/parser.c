@@ -179,14 +179,26 @@ void compileFuncDecl(void) {
 }
 
 void compileProcDecl(void) {
-  // TODO: create and declare a procedure object
+  // DONE: create and declare a procedure object
   Object* procObj;
+
   eat(KW_PROCEDURE);
   eat(TK_IDENT);
+
+  // create procedure object
+  procObj = createProcedureObject(currentToken->string);
+  // declare it
+  declareObject(procObj);
+  // enter the procedure's block
+  enterBlock(procObj->procAttrs->scope);
+
+  // parse params list
   compileParams();
   eat(SB_SEMICOLON);
   compileBlock();
   eat(SB_SEMICOLON);
+  // done, exit block
+  exitBlock();
 }
 
 ConstantValue* compileUnsignedConstant(void) {
@@ -228,7 +240,7 @@ ConstantValue* compileConstant(void) {
     break;
   case TK_CHAR:
     eat(TK_CHAR);
-    constValue->charValue = currentToken->string[0];
+    constValue = makeCharConstant(currentToken->string[0]);
     break;
   default:
     constValue = compileConstant2();
