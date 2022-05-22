@@ -340,7 +340,9 @@ void compileParams(void) {
 
 void compileParam(void) {
   // DONE: create and declare a parameter
+  Object* param;
   enum ParamKind paramKind;
+  Type* type;
 
   switch (lookAhead->tokenType) {
   case TK_IDENT:
@@ -354,6 +356,13 @@ void compileParam(void) {
     error(ERR_INVALID_PARAMETER, lookAhead->lineNo, lookAhead->colNo);
     break;
   }
+
+  eat(TK_IDENT);
+  param = createParameterObject(currentToken->string, paramKind, symtab->currentScope);
+  eat(SB_COLON);
+  type = compileBasicType();
+  param->paramAttrs->type = type;
+  declareObject(param);
 }
 
 void compileStatements(void) {
