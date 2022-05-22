@@ -358,7 +358,7 @@ void compileParam(void) {
   }
 
   eat(TK_IDENT);
-  param = createParameterObject(currentToken->string, paramKind, symtab->currentScope);
+  param = createParameterObject(currentToken->string, paramKind, symtab->currentScope->owner);
   eat(SB_COLON);
   type = compileBasicType();
   param->paramAttrs->type = type;
