@@ -314,7 +314,7 @@ void exitBlock(void) {
 }
 
 Object* lookupObject(char *name) {
-  // TODO
+  // DONE
   Scope* scope = symtab->currentScope;
   Object* obj;
   while(scope){
