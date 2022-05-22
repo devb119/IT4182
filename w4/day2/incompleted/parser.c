@@ -154,7 +154,7 @@ void compileSubDecls(void) {
 }
 
 void compileFuncDecl(void) {
-  // TODO: create and declare a function object
+  // DONE: create and declare a function object
   Object* funcObj;
   Type* returnType;
 
@@ -190,18 +190,20 @@ void compileProcDecl(void) {
 }
 
 ConstantValue* compileUnsignedConstant(void) {
-  // TODO: create and return an unsigned constant value
+  // DONE: create and return an unsigned constant value
   ConstantValue* constValue;
 
   switch (lookAhead->tokenType) {
   case TK_NUMBER:
     eat(TK_NUMBER);
+    constValue = makeIntConstant(currentToken->value);
     break;
   case TK_IDENT:
     eat(TK_IDENT);
     break;
   case TK_CHAR:
     eat(TK_CHAR);
+    constValue = makeCharConstant(currentToken->string[0]);
     break;
   default:
     error(ERR_INVALID_CONSTANT, lookAhead->lineNo, lookAhead->colNo);
