@@ -107,7 +107,7 @@ void compileBlock2(void) {
 }
 
 void compileBlock3(void) {
-  // TODO: create and declare variable objects
+  // DONE: create and declare variable objects
   Object* varObj;
   Type* varType;
 
@@ -155,17 +155,32 @@ void compileSubDecls(void) {
 
 void compileFuncDecl(void) {
   // TODO: create and declare a function object
+  Object* funcObj;
+  Type* returnType;
+
   eat(KW_FUNCTION);
   eat(TK_IDENT);
+  // create function obj
+  funcObj = createFunctionObject(currentToken->string);
+  // declare function obj
+  declareObject(funcObj);
+  // enter function's block
+  enterBlock(funcObj->funcAttrs->scope);
+  // parse functions's params
   compileParams();
   eat(SB_COLON);
+  returnType = compileBasicType();
+  funcObj->funcAttrs->returnType = returnType;
   eat(SB_SEMICOLON);
   compileBlock();
   eat(SB_SEMICOLON);
+  // compile function done, exit block
+  exitBlock();
 }
 
 void compileProcDecl(void) {
   // TODO: create and declare a procedure object
+  Object* procObj;
   eat(KW_PROCEDURE);
   eat(TK_IDENT);
   compileParams();
@@ -278,15 +293,17 @@ Type* compileType(void) {
 }
 
 Type* compileBasicType(void) {
-  // TODO: create and return a basic type
+  // DONE: create and return a basic type
   Type* type;
 
   switch (lookAhead->tokenType) {
   case KW_INTEGER: 
     eat(KW_INTEGER); 
+    type = makeIntType();
     break;
   case KW_CHAR: 
     eat(KW_CHAR); 
+    type = makeCharType();
     break;
   default:
     error(ERR_INVALID_BASICTYPE, lookAhead->lineNo, lookAhead->colNo);
@@ -308,18 +325,16 @@ void compileParams(void) {
 }
 
 void compileParam(void) {
-  // TODO: create and declare a parameter
+  // DONE: create and declare a parameter
+  enum ParamKind paramKind;
+
   switch (lookAhead->tokenType) {
   case TK_IDENT:
-    eat(TK_IDENT);
-    eat(SB_COLON);
-    compileBasicType();
+    paramKind = PARAM_VALUE;
     break;
   case KW_VAR:
     eat(KW_VAR);
-    eat(TK_IDENT);
-    eat(SB_COLON);
-    compileBasicType();
+    paramKind = PARAM_REFERENCE;
     break;
   default:
     error(ERR_INVALID_PARAMETER, lookAhead->lineNo, lookAhead->colNo);
