@@ -298,6 +298,7 @@ Type* compileType(void) {
     break;
   case TK_IDENT:
     eat(TK_IDENT);
+    type = duplicateType(lookupObject(currentToken->string)->typeAttrs->actualType);
     break;
   default:
     error(ERR_INVALID_TYPE, lookAhead->lineNo, lookAhead->colNo);
