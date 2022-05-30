@@ -97,5 +97,21 @@ Object* checkDeclaredProcedure(char* name) {
 
 Object* checkDeclaredLValueIdent(char* name) {
   // TODO
+  Object* obj = lookupObject(name);
+  if(!obj) error(ERR_UNDECLARED_IDENT, currentToken->lineNo, currentToken->colNo);
+  switch(obj->kind){
+    case OBJ_VARIABLE:
+    case OBJ_PARAMETER:
+      break;
+    case OBJ_FUNCTION:
+      if(obj != symtab->currentScope->owner)
+      error(ERR_INVALID_IDENT, currentToken->lineNo, currentToken->colNo);
+      break;
+    default:
+      error(ERR_DUPLICATE_IDENT, currentToken->lineNo, currentToken->colNo);
+      break;
+  }
+
+  return obj;
 }
 
