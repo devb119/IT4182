@@ -277,6 +277,7 @@ Type* compileType(void) {
   Type* type;
   Type* elementType;
   int arraySize;
+  int stringLength;
   Object* obj;
 
   switch (lookAhead->tokenType) {
@@ -287,6 +288,21 @@ Type* compileType(void) {
   case KW_CHAR: 
     eat(KW_CHAR); 
     type = makeCharType();
+    break;
+  case KW_DOUBLE:
+    eat(KW_DOUBLE);
+    type = makeDoubleType();
+    break;
+  case KW_STRING:
+    eat(KW_STRING);
+    eat(SB_LSEL);
+    eat(TK_NUMBER);
+
+    stringLength = currentToken->value;
+
+    eat(SB_RSEL);
+    
+    type = makeStringType(stringLength);
     break;
   case KW_ARRAY:
     eat(KW_ARRAY);
@@ -323,6 +339,10 @@ Type* compileBasicType(void) {
   case KW_CHAR: 
     eat(KW_CHAR); 
     type = makeCharType();
+    break;
+  case KW_DOUBLE:
+    eat(KW_DOUBLE);
+    type = makeDoubleType();
     break;
   default:
     error(ERR_INVALID_BASICTYPE, lookAhead->lineNo, lookAhead->colNo);
@@ -463,7 +483,9 @@ void compileAssignSt(void) {
   varType = compileLValue();
   
   eat(SB_ASSIGN);
+  // BUG
   expType = compileExpression();
+  printf("%d - %d\n", varType->typeClass, expType->typeClass);
 
   checkTypeEquality(varType, expType);
 }
@@ -529,9 +551,7 @@ void compileForSt(void) {
 
 void compileSwitchSt(void){
   eat(KW_SWITCH);
-  printf("eat switch");
   compileExpression();
-  printf("compile done");
   compileStatement();
 }
 
@@ -640,7 +660,7 @@ void compileCondition(void) {
 
 Type* compileExpression(void) {
   Type* type;
-  
+
   switch (lookAhead->tokenType) {
   case SB_PLUS:
     eat(SB_PLUS);

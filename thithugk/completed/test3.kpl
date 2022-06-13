@@ -1,0 +1,31 @@
+Program test;
+   
+Var n : Integer;
+    s : string(. 10 .);
+
+procedure hello;
+var a : Integer;
+Begin
+    switch n**2
+    begin 
+        case 1 : 
+            n := n**1;
+            break;
+        case 2 : 
+            n := n**2;
+            break;
+        default:
+            n := n**0;
+            break;
+    end;
+end;
+
+procedure doublestring;
+Var d : Double;
+Begin
+    d := 3.14;
+End;
+
+Begin
+  CALL hello;
+End.

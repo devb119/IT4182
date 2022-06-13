@@ -35,7 +35,9 @@ struct {
   {"SWITCH", KW_SWITCH},
   {"CASE", KW_CASE},
   {"BREAK", KW_BREAK},
-  {"DEFAULT", KW_DEFAULT}
+  {"DEFAULT", KW_DEFAULT},
+  {"STRING", KW_STRING},
+  {"DOUBLE", KW_DOUBLE},
 };
 
 int keywordEq(char *kw, char *string) {
@@ -94,6 +96,8 @@ char *tokenToString(TokenType tokenType) {
   case KW_CASE: return "keyword CASE";
   case KW_DEFAULT: return "keyword DEFAULT";
   case KW_BREAK: return "keyword BREAK";
+  case KW_STRING: return "keyword STRING";
+  case KW_DOUBLE: return "keyword DOUBLE";
 
   case SB_SEMICOLON: return "\';\'";
   case SB_COLON: return "\':\'";

@@ -78,14 +78,24 @@ Token* readIdentKeyword(void) {
 Token* readNumber(void) {
   Token *token = makeToken(TK_NUMBER, lineNo, colNo);
   int count = 0;
+  int periodCount = 0;
 
-  while ((currentChar != EOF) && (charCodes[currentChar] == CHAR_DIGIT)) {
+  while ((currentChar != EOF) && ((charCodes[currentChar] == CHAR_DIGIT) || 
+  (charCodes[currentChar] == CHAR_PERIOD))) {
     token->string[count++] = (char)currentChar;
+
+    if(charCodes[currentChar] == CHAR_PERIOD) periodCount++;
     readChar();
   }
 
   token->string[count] = '\0';
-  token->value = atoi(token->string);
+  if(periodCount == 0){
+    token->value = atoi(token->string);
+  }else if(periodCount == 1){
+    token->value = atof(token->string);
+  }else{
+    error(ERR_INVALID_VARIABLE, lineNo, colNo);
+  }
   return token;
 }
 
@@ -285,6 +295,8 @@ void printToken(Token *token) {
   case KW_CASE: printf("KW_CASE\n"); break;
   case KW_BREAK: printf("KW_BREAK\n"); break;
   case KW_DEFAULT: printf("KW_DEFAULT\n"); break;
+  case KW_STRING: printf("KW_STRING\n"); break;
+  case KW_DOUBLE: printf("KW_DOUBLE\n"); break;
 
   case SB_SEMICOLON: printf("SB_SEMICOLON\n"); break;
   case SB_COLON: printf("SB_COLON\n"); break;
