@@ -43,6 +43,8 @@ void compileIfSt(void);
 void compileElseSt(void);
 void compileWhileSt(void);
 void compileForSt(void);
+void compileSwitchSt(void);
+void compileCaseSt(void);
 void compileArgument(Object* param);
 void compileArguments(ObjectNode* paramList);
 void compileCondition(void);

@@ -382,6 +382,7 @@ void compileStatements(void) {
 }
 
 void compileStatement(void) {
+  // printf("%s - %d", lookAhead->string, lookAhead->tokenType);
   switch (lookAhead->tokenType) {
   case TK_IDENT:
     compileAssignSt();
@@ -401,7 +402,21 @@ void compileStatement(void) {
   case KW_FOR:
     compileForSt();
     break;
+  case KW_SWITCH:
+    compileSwitchSt();
+    break;
     // EmptySt needs to check FOLLOW tokens
+  case KW_CASE:
+    compileCaseSt();
+    break;
+  case KW_BREAK:
+    eat(KW_BREAK);
+    break;
+  case KW_DEFAULT:
+    eat(KW_DEFAULT);
+    eat(SB_COLON);
+    compileStatement();
+    break;
   case SB_SEMICOLON:
   case KW_END:
   case KW_ELSE:
@@ -510,6 +525,21 @@ void compileForSt(void) {
 
   eat(KW_DO);
   compileStatement();
+}
+
+void compileSwitchSt(void){
+  eat(KW_SWITCH);
+  printf("eat switch");
+  compileExpression();
+  printf("compile done");
+  compileStatement();
+}
+
+void compileCaseSt(void){
+  eat(KW_CASE);
+  compileConstant();
+  eat(SB_COLON);
+  compileStatements();
 }
 
 void compileArgument(Object* param) {
@@ -670,6 +700,7 @@ void compileExpression3(void) {
   case KW_END:
   case KW_ELSE:
   case KW_THEN:
+  case KW_BEGIN:
     break;
   default:
     error(ERR_INVALID_EXPRESSION, lookAhead->lineNo, lookAhead->colNo);
@@ -691,6 +722,12 @@ void compileTerm2(void) {
   switch (lookAhead->tokenType) {
   case SB_TIMES:
     eat(SB_TIMES);
+    type = compileFactor();
+    checkIntType(type);
+    compileTerm2();
+    break;
+  case SB_POWER:
+    eat(SB_POWER);
     type = compileFactor();
     checkIntType(type);
     compileTerm2();
@@ -719,6 +756,7 @@ void compileTerm2(void) {
   case KW_END:
   case KW_ELSE:
   case KW_THEN:
+  case KW_BEGIN:
     break;
   default:
     error(ERR_INVALID_TERM, lookAhead->lineNo, lookAhead->colNo);
