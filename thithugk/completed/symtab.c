@@ -344,7 +344,7 @@ void initSymTab(void) {
 }
 
 void cleanSymTab(void) {
-  // BUG
+  // DONE
   freeObject(symtab->program);
   freeObjectList(symtab->globalObjectList);
   free(symtab);
