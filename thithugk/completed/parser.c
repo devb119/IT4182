@@ -708,7 +708,7 @@ void compileExpression3(void) {
   case SB_MINUS:
     eat(SB_MINUS);
     type = compileTerm();
-    checkIntType(type);
+    checkNumber(type);
     compileExpression3();
     break;
     // check the FOLLOW set
@@ -750,19 +750,19 @@ void compileTerm2(void) {
   case SB_TIMES:
     eat(SB_TIMES);
     type = compileFactor();
-    checkIntType(type);
+    checkNumber(type);
     compileTerm2();
     break;
   case SB_POWER:
     eat(SB_POWER);
     type = compileFactor();
-    checkIntType(type);
+    checkNumber(type);
     compileTerm2();
     break;
   case SB_SLASH:
     eat(SB_SLASH);
     type = compileFactor();
-    checkIntType(type);
+    checkNumber(type);
     compileTerm2();
     break;
     // check the FOLLOW set
