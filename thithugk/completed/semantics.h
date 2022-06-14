@@ -18,6 +18,8 @@ Object* checkDeclaredFunction(char *name);
 Object* checkDeclaredProcedure(char *name);
 Object* checkDeclaredLValueIdent(char *name);
 
+void checkPlusOperand(Type* type);
+void checkNumber(Type* type);
 void checkIntType(Type* type);
 void checkCharType(Type* type);
 void checkArrayType(Type* type);

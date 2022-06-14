@@ -109,6 +109,18 @@ Object* checkDeclaredLValueIdent(char* name) {
   return obj;
 }
 
+void checkPlusOperand(Type* type){
+  if((type != NULL) && ((type->typeClass == TP_INT) || (type->typeClass == TP_DOUBLE)
+  || (type->typeClass == TP_STRING)))
+    return;
+  else error(ERR_TYPE_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
+}
+
+void checkNumber(Type* type){
+  if((type != NULL) && ((type->typeClass == TP_INT) || (type->typeClass == TP_DOUBLE)))
+    return;
+  else error(ERR_TYPE_INCONSISTENCY, currentToken->lineNo, currentToken->colNo);
+}
 
 void checkIntType(Type* type) {
   if ((type != NULL) && (type->typeClass == TP_INT))
