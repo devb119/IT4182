@@ -46,7 +46,9 @@ struct ConstantValue_ {
   enum TypeClass type;
   union {
     int intValue;
+    double doubleValue;
     char charValue;
+    char* stringValue;
   };
 };
 
@@ -147,6 +149,8 @@ int compareType(Type* type1, Type* type2);
 void freeType(Type* type);
 
 ConstantValue* makeIntConstant(int i);
+ConstantValue* makeDoubleConstant(double d);
+ConstantValue* makeStringConstant(char* s);
 ConstantValue* makeCharConstant(char ch);
 ConstantValue* duplicateConstantValue(ConstantValue* v);
 

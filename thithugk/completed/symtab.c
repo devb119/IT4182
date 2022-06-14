@@ -64,6 +64,9 @@ Type* duplicateType(Type* type) {
 }
 
 int compareType(Type* type1, Type* type2) {
+  if(((type1->typeClass == TP_DOUBLE) || (type1->typeClass == TP_INT)) &&
+  (((type2->typeClass == TP_DOUBLE) || (type2->typeClass == TP_INT))))
+  return 1;
   if (type1->typeClass == type2->typeClass) {
     if (type1->typeClass == TP_ARRAY) {
       if (type1->arraySize == type2->arraySize)
@@ -94,6 +97,20 @@ ConstantValue* makeIntConstant(int i) {
   ConstantValue* value = (ConstantValue*) malloc(sizeof(ConstantValue));
   value->type = TP_INT;
   value->intValue = i;
+  return value;
+}
+
+ConstantValue* makeDoubleConstant(double d){
+  ConstantValue* value = (ConstantValue*)malloc(sizeof(ConstantValue));
+  value->type = TP_DOUBLE;
+  value->doubleValue = d;
+  return value;
+}
+
+ConstantValue* makeStringConstant(char* s){
+  ConstantValue* value = (ConstantValue*)malloc(sizeof(ConstantValue));
+  value->type = TP_STRING;
+  value->stringValue = s;
   return value;
 }
 

@@ -1,4 +1,5 @@
 Program test;
+const X = 4.0;
    
 Var n : Integer;
     s : string;

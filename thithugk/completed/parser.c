@@ -207,6 +207,12 @@ ConstantValue* compileUnsignedConstant(void) {
     eat(TK_NUMBER);
     constValue = makeIntConstant(currentToken->value);
     break;
+  case TK_DOUBLE:
+    eat(TK_DOUBLE);
+    constValue = makeDoubleConstant(currentToken->dValue);
+  case TK_STRING:
+    eat(TK_STRING);
+    constValue = makeStringConstant(currentToken->str);
   case TK_IDENT:
     eat(TK_IDENT);
 
@@ -258,6 +264,14 @@ ConstantValue* compileConstant2(void) {
     eat(TK_NUMBER);
     constValue = makeIntConstant(currentToken->value);
     break;
+  case TK_DOUBLE:
+    eat(TK_DOUBLE);
+    constValue = makeDoubleConstant(currentToken->dValue);
+    break;
+  case TK_STRING:
+    eat(TK_STRING);
+    constValue = makeStringConstant(currentToken->str);
+    break;
   case TK_IDENT:
     eat(TK_IDENT);
     obj = checkDeclaredConstant(currentToken->string);
@@ -277,7 +291,6 @@ Type* compileType(void) {
   Type* type;
   Type* elementType;
   int arraySize;
-  int stringLength;
   Object* obj;
 
   switch (lookAhead->tokenType) {
@@ -336,6 +349,10 @@ Type* compileBasicType(void) {
   case KW_DOUBLE:
     eat(KW_DOUBLE);
     type = makeDoubleType();
+    break;
+  case KW_STRING:
+    eat(KW_STRING);
+    type = makeStringType();
     break;
   default:
     error(ERR_INVALID_BASICTYPE, lookAhead->lineNo, lookAhead->colNo);
@@ -475,7 +492,6 @@ void compileAssignSt(void) {
   varType = compileLValue();
   
   eat(SB_ASSIGN);
-  // BUG
   expType = compileExpression();
 
   checkTypeEquality(varType, expType);
@@ -786,6 +802,10 @@ Type* compileFactor(void) {
   case TK_DOUBLE:
     eat(TK_DOUBLE);
     type = makeDoubleType();
+    break;
+  case TK_STRING:
+    eat(TK_STRING);
+    type = makeStringType();
     break;
   case TK_CHAR:
     eat(TK_CHAR);
