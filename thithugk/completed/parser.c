@@ -702,7 +702,7 @@ void compileExpression3(void) {
   case SB_PLUS:
     eat(SB_PLUS);
     type = compileTerm();
-    checkIntType(type);
+    checkPlusOperand(type);
     compileExpression3();
     break;
   case SB_MINUS:
