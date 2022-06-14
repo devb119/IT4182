@@ -85,6 +85,8 @@ void freeType(Type* type) {
     free(type);
     break;
   case TP_STRING:
+    free(type->elementType);
+    break;
   case TP_ARRAY:
     freeType(type->elementType);
     freeType(type);
@@ -342,6 +344,7 @@ void initSymTab(void) {
 }
 
 void cleanSymTab(void) {
+  // BUG
   freeObject(symtab->program);
   freeObjectList(symtab->globalObjectList);
   free(symtab);
