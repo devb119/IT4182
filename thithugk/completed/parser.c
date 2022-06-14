@@ -485,7 +485,6 @@ void compileAssignSt(void) {
   eat(SB_ASSIGN);
   // BUG
   expType = compileExpression();
-  printf("%d - %d\n", varType->typeClass, expType->typeClass);
 
   checkTypeEquality(varType, expType);
 }

@@ -33,6 +33,7 @@ typedef struct {
   int lineNo, colNo;
   TokenType tokenType;
   int value;
+  double dValue;
 } Token;
 
 TokenType checkKeyword(char *string);

@@ -92,7 +92,7 @@ Token* readNumber(void) {
   if(periodCount == 0){
     token->value = atoi(token->string);
   }else if(periodCount == 1){
-    token->value = atof(token->string);
+    token->dValue = atof(token->string);
   }else{
     error(ERR_INVALID_VARIABLE, lineNo, colNo);
   }
