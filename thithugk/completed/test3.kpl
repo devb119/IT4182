@@ -1,8 +1,11 @@
 Program test;
-const X = 4.0;
+const   X = 4.0;
+        s1 = "this is a string";
+
    
 Var n : Integer;
     s : string;
+    d : Double;
 
 procedure hello;
 var a : Integer;
@@ -22,7 +25,6 @@ Begin
 end;
 
 procedure doublestring;
-Var d : Double;
 Begin
     d := 3.14;
 End;
@@ -30,4 +32,6 @@ End;
 Begin
   CALL hello;
   CALL doublestring;
+  call writed(d);
+  s := s + "alo";
 End.
