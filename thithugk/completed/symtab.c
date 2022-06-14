@@ -36,6 +36,7 @@ Type* makeCharType(void) {
 Type* makeStringType(void){
   Type *elementType = makeCharType();
   Type* type = makeArrayType(MAX_STR_LEN, elementType);
+  type->typeClass = TP_STRING;
   return type;
 }
 
@@ -318,6 +319,18 @@ void initSymTab(void) {
   obj = createProcedureObject("WRITEC");
   param = createParameterObject("ch", PARAM_VALUE, obj);
   param->paramAttrs->type = makeCharType();
+  addObject(&(obj->procAttrs->paramList),param);
+  addObject(&(symtab->globalObjectList), obj);
+
+  obj = createProcedureObject("WRITED");
+  param = createParameterObject("d", PARAM_VALUE, obj);
+  param->paramAttrs->type = makeDoubleType();
+  addObject(&(obj->procAttrs->paramList),param);
+  addObject(&(symtab->globalObjectList), obj);
+
+  obj = createProcedureObject("WRITES");
+  param = createParameterObject("s", PARAM_VALUE, obj);
+  param->paramAttrs->type = makeStringType();
   addObject(&(obj->procAttrs->paramList),param);
   addObject(&(symtab->globalObjectList), obj);
 
