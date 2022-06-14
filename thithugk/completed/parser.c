@@ -295,14 +295,7 @@ Type* compileType(void) {
     break;
   case KW_STRING:
     eat(KW_STRING);
-    eat(SB_LSEL);
-    eat(TK_NUMBER);
-
-    stringLength = currentToken->value;
-
-    eat(SB_RSEL);
-    
-    type = makeStringType(stringLength);
+    type = makeStringType();
     break;
   case KW_ARRAY:
     eat(KW_ARRAY);
@@ -402,7 +395,6 @@ void compileStatements(void) {
 }
 
 void compileStatement(void) {
-  // printf("%s - %d", lookAhead->string, lookAhead->tokenType);
   switch (lookAhead->tokenType) {
   case TK_IDENT:
     compileAssignSt();
@@ -790,6 +782,10 @@ Type* compileFactor(void) {
   case TK_NUMBER:
     eat(TK_NUMBER);
     type = intType;
+    break;
+  case TK_DOUBLE:
+    eat(TK_DOUBLE);
+    type = makeDoubleType();
     break;
   case TK_CHAR:
     eat(TK_CHAR);

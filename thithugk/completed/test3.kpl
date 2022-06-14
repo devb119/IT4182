@@ -1,7 +1,7 @@
 Program test;
    
 Var n : Integer;
-    s : string(. 10 .);
+    s : string;
 
 procedure hello;
 var a : Integer;
@@ -28,4 +28,5 @@ End;
 
 Begin
   CALL hello;
+  CALL doublestring;
 End.

@@ -33,9 +33,9 @@ Type* makeCharType(void) {
   return type;
 }
 
-Type* makeStringType(int stringLength){
+Type* makeStringType(void){
   Type *elementType = makeCharType();
-  Type* type = makeArrayType(stringLength, elementType);
+  Type* type = makeArrayType(MAX_STR_LEN, elementType);
   return type;
 }
 

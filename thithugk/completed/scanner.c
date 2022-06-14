@@ -76,7 +76,7 @@ Token* readIdentKeyword(void) {
 }
 
 Token* readNumber(void) {
-  Token *token = makeToken(TK_NUMBER, lineNo, colNo);
+  Token *token = makeToken(TK_NONE, lineNo, colNo);
   int count = 0;
   int periodCount = 0;
 
@@ -90,8 +90,10 @@ Token* readNumber(void) {
 
   token->string[count] = '\0';
   if(periodCount == 0){
+    token->tokenType = TK_NUMBER;
     token->value = atoi(token->string);
   }else if(periodCount == 1){
+    token->tokenType = TK_DOUBLE;
     token->dValue = atof(token->string);
   }else{
     error(ERR_INVALID_VARIABLE, lineNo, colNo);
@@ -125,6 +127,39 @@ Token* readConstChar(void) {
   } else {
     token->tokenType = TK_NONE;
     error(ERR_INVALID_CONSTANT_CHAR, token->lineNo, token->colNo);
+    return token;
+  }
+}
+
+Token* readConstString(void){
+  Token *token = makeToken(TK_STRING, lineNo, colNo);
+  int count = 0;
+  readChar();
+
+  while (currentChar != EOF && charCodes[currentChar] != CHAR_DOUBLEQUOTE){
+    if(count <= MAX_STR_LEN) token->str[count++] = (char)currentChar;
+    readChar();
+  }
+
+  if(count > MAX_STR_LEN){
+    error(ERR_STR_TOO_LONG, token->lineNo, token->colNo);
+    return token;
+  }
+
+  token->str[count] = '\0';
+
+  if(currentChar == EOF){
+    token->tokenType = TK_NONE;
+    error(ERR_INVALID_CONSTANT_STR, token->lineNo, token->colNo);
+    return token;
+  }
+
+  if(charCodes[currentChar] == CHAR_DOUBLEQUOTE){
+    readChar();
+    return token;
+  }else{
+    token->tokenType = TK_NONE;
+    error(ERR_INVALID_CONSTANT_STR, token->lineNo, token->colNo);
     return token;
   }
 }
@@ -217,6 +252,7 @@ Token* getToken(void) {
       return makeToken(SB_ASSIGN, ln, cn);
     } else return makeToken(SB_COLON, ln, cn);
   case CHAR_SINGLEQUOTE: return readConstChar();
+  case CHAR_DOUBLEQUOTE: return readConstString();
   case CHAR_LPAR:
     ln = lineNo;
     cn = colNo;

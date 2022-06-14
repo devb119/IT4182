@@ -139,7 +139,7 @@ typedef struct SymTab_ SymTab;
 
 Type* makeIntType(void);
 Type* makeCharType(void);
-Type* makeStringType(int stringLength);
+Type* makeStringType(void);
 Type* makeDoubleType(void);
 Type* makeArrayType(int arraySize, Type* elementType);
 Type* duplicateType(Type* type);
