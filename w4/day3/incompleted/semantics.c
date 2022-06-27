@@ -96,7 +96,7 @@ Object* checkDeclaredProcedure(char* name) {
 }
 
 Object* checkDeclaredLValueIdent(char* name) {
-  // TODO
+  // DONE
   Object* obj = lookupObject(name);
   if(!obj) error(ERR_UNDECLARED_IDENT, currentToken->lineNo, currentToken->colNo);
   switch(obj->kind){

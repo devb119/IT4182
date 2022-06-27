@@ -34,7 +34,8 @@ BEGIN
      BEGIN
        S := S + A(.I.);
        I := I + 1;
-     END
+     END;
+    SUM := S;
 END;
 
 BEGIN
